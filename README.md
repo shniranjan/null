@@ -46,31 +46,31 @@ who want:
 - [x] Dark-themed React dashboard with sidebar navigation
 - [x] Docker Compose deployment (backend + frontend)
 
-### Phase 2 — VM Management 🚧
-- [ ] VM list with filtering/searching
-- [ ] VM create wizard (template-based)
-- [ ] VM lifecycle (start, stop, pause, suspend, reboot, force reboot)
-- [ ] Live migration between hosts
-- [ ] In-browser VNC console (noVNC)
-- [ ] VM detail view (disks, NICs, metrics)
+### Phase 2 — VM Management ✅
+- [x] VM list with filtering/searching
+- [x] VM create wizard (template-based)
+- [x] VM lifecycle (start, stop, pause, suspend, reboot, force reboot)
+- [x] Live migration between hosts
+- [x] In-browser VNC console (noVNC)
+- [x] VM detail view (disks, NICs, metrics)
 
-### Phase 3 — Storage & Networking 🚧
-- [ ] Storage Repository management (create, destroy, rescan)
-- [ ] Virtual Disk management (VDI create, resize, attach/detach)
-- [ ] Network management (create, destroy, VLAN, bond)
-- [ ] Virtual NIC management (VIF attach/detach, IP config)
+### Phase 3 — Storage & Networking ✅
+- [x] Storage Repository management (create, destroy, rescan)
+- [x] Virtual Disk management (VDI create, resize, attach/detach)
+- [x] Network management (create, destroy, VLAN, bond)
+- [x] Virtual NIC management (VIF attach/detach, IP config)
 
-### Phase 4 — Advanced 🚧
-- [ ] Snapshots and snapshot trees
-- [ ] Real-time metrics charts
-- [ ] WebSocket events (live updates)
-- [ ] Advanced audit log viewer
+### Phase 4 — Advanced ✅
+- [x] Snapshots and snapshot trees
+- [x] Real-time metrics charts
+- [x] WebSocket events (live updates)
+- [x] Advanced audit log viewer
 
-### Phase 5 — Polish 🚧
-- [ ] Built-in help & tutorials
-- [ ] Tag system for VMs/hosts
-- [ ] Diff viewer for configuration changes
-- [ ] VM export/import profiles
+### Phase 5 — Polish ✅
+- [x] Built-in help & tutorials
+- [x] Tag system for VMs/hosts
+- [x] Diff viewer for configuration changes
+- [x] VM export/import profiles
 
 ---
 
@@ -86,7 +86,7 @@ who want:
 │  │                    │     │                        │  │
 │  │  • Dashboard       │     │  • REST API            │  │
 │  │  • VM Manager      │     │  • XAPI XML-RPC client │  │
-│  │  • Storage         │     │  • SQLite (users/logs) │──┼──▶ data/xcpng-gui.db
+│  │  • Storage         │     │  • SQLite (users/logs) │──┼──▶ null.db
 │  │  • Networking      │     │  • JWT Auth            │  │
 │  │  • Console (noVNC) │     │  • Plugin system       │  │
 │  └────────────────────┘     └───────────┬────────────┘  │
@@ -122,8 +122,8 @@ See [docs/architecture.md](docs/architecture.md) for detailed design.
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/xcpng-manager.git
-cd xcpng-manager
+git clone https://github.com/shniranjan/null.git
+cd null
 
 # Copy and edit environment
 cp .env.example .env
@@ -193,7 +193,7 @@ See [docs/api-reference.md](docs/api-reference.md) for complete API reference.
 | Environment Variable | Default | Description |
 |---------------------|---------|-------------|
 | `XCPNG_MANAGER_SECRET` | *(required)* | JWT signing secret (use a strong random string) |
-| `XCPNG_DB_PATH` | `data/xcpng-gui.db` | SQLite database file path |
+| `XCPNG_DB_PATH` | `null.db` | SQLite database file path |
 | `XCPNG_TOKEN_EXPIRE` | `480` | JWT token expiry in minutes (8 hours) |
 
 ---
