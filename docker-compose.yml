@@ -2,16 +2,12 @@ version: "3.8"
 
 services:
   "null":
-    build:
-      context: .
-      dockerfile: Dockerfile
     image: ghcr.io/shniranjan/null:latest
     container_name: "null"
     ports:
       - "8000:8000"
     environment:
-      - XCPNG_MANAGER_SECRET=${XCPN...n}
-      - XCPNG_DB_PATH=/data/null.db
+      - XCPNG_MANAGER_SECRET=***      - XCPNG_DB_PATH=/data/null.db
     volumes:
       - ./data:/data
     restart: unless-stopped
