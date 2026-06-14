@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./backend
+    container_name: null-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - XCPNG_MANAGER_SECRET=${XCPNG_MANAGER_SECRET:-change-me-in-production}
+      - XCPNG_DB_PATH=/data/null.db
+    volumes:
+      - ./data:/data
+      - ./backend/app:/app/app:ro
+    restart: unless-stopped
+    networks:
+      - null
+
+  frontend:
+    build: ./frontend
+    container_name: null-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - VITE_API_URL=http://backend:8000
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - null
+
+networks:
+  null:
+    driver: bridge
