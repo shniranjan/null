@@ -1,7 +1,7 @@
 services:
   backend:
     build: ./backend
-    # image: ghcr.io/shniranjan/null-backend:latest
+    image: ghcr.io/shniranjan/null-backend:latest
     container_name: null-backend
     ports:
       - "8000:8000"
@@ -18,7 +18,7 @@ services:
 
   frontend:
     build: ./frontend
-    # image: ghcr.io/shniranjan/null-frontend:latest
+    image: ghcr.io/shniranjan/null-frontend:latest
     container_name: null-frontend
     ports:
       - "3000:3000"
