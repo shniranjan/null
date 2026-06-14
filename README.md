@@ -117,8 +117,8 @@ See [docs/architecture.md](docs/architecture.md) for detailed design.
 ```bash
 git clone https://github.com/shniranjan/null.git
 cd null
-cp .env.example .env
-# edit .env — set XCPNG_MANAGER_SECRET to a strong random string
+# Optional: cp .env.example .env (auto-generated secret if skipped)
+
 docker compose up -d
 open http://localhost:8000
 ```
