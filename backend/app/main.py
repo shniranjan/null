@@ -2,17 +2,18 @@
 Null — FastAPI Application Entry Point
 
 Start with:
-  cd backend && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+  uvicorn app.main:app --host 0.0.0.0 --port 8000
 
-API docs available at:
-  http://localhost:8000/docs       (Swagger UI)
-  http://localhost:8000/redoc      (ReDoc)
+API docs at /docs — frontend SPA served at /
 """
 
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
+import os
 
 from config import settings
 from database import init_db
@@ -32,19 +33,14 @@ from routes.metrics import router as metrics_router
 from routes.docs_api import router as docs_router
 from routes.passthrough import router as passthrough_router
 
+STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    """Startup/shutdown lifecycle."""
-    # Startup
     init_db()
     ensure_default_admin()
-
-    # TODO: Load saved pools from DB into pool_registry
-
     yield
-
-    # Shutdown
     from xapi.client import pool_registry
     pool_registry.shutdown_all()
 
@@ -52,23 +48,10 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Null",
     description="""
-    **Docker-based remote management GUI for XCP-ng virtualization hosts.**
+    **Remote dominion over your XCP-ng infrastructure.**
 
-    ## Features
-
-    - Multi-pool management (connect to multiple XCP-ng pools)
-    - Full VM lifecycle (create, start, stop, migrate, snapshot, clone)
-    - Storage management (SR, VDI, attach/detach)
-    - Network management (networks, VLANs, bonds, VIFs)
-    - Real-time metrics and performance charts
-    - In-browser VNC console
-    - Multi-user with role-based access
-    - Audit logging
-
-    ## Architecture
-
-    This backend communicates with XCP-ng hosts via the XAPI XML-RPC protocol
-    over HTTPS. It provides a REST API consumed by the React frontend.
+    Single-container Docker deployment — serves the React UI and REST API
+    from one process. Communicates with XCP-ng via XAPI XML-RPC over HTTPS.
     """,
     version="0.1.0",
     lifespan=lifespan,
@@ -76,7 +59,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# CORS — allow frontend dev server and Docker internal
+# CORS — local dev only; in Docker the SPA is same-origin
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.cors_origins,
@@ -85,7 +68,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Register routes
+# ── API routes ──────────────────────────────────────────────────────
+
 app.include_router(auth_router)
 app.include_router(users_router)
 app.include_router(pools_router)
@@ -100,18 +84,21 @@ app.include_router(metrics_router)
 app.include_router(docs_router)
 app.include_router(passthrough_router)
 
+# ── Serve frontend (must be after API routes) ───────────────────────
 
-@app.get("/")
+if os.path.isdir(STATIC_DIR):
+    app.mount("/assets", StaticFiles(directory=os.path.join(STATIC_DIR, "assets")), name="assets")
+
+    @app.get("/{full_path:path}")
+    async def serve_spa(full_path: str = ""):
+        """Serve the React SPA — all non-API routes return index.html."""
+        index = os.path.join(STATIC_DIR, "index.html")
+        if os.path.isfile(index):
+            return FileResponse(index)
+        return {"service": "Null", "version": "0.1.0", "docs": "/docs"}
+
+
+@app.get("/api/health")
 async def root():
-    return {
-        "service": "Null",
-        "version": "0.1.0",
-        "docs": "/docs",
-        "health": "/api/health",
-        "endpoints": {
-            "auth": "/api/auth/login",
-            "pools": "/api/pools",
-            "users": "/api/users",
-            "audit": "/api/audit",
-        },
-    }
+    """Legacy root — the SPA handles / in production."""
+    return {"service": "Null", "version": "0.1.0", "docs": "/docs"}

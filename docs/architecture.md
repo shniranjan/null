@@ -6,13 +6,13 @@ frontend with XCP-ng's XAPI management protocol.
 ## High-Level Design
 
 ```
-                     Browser (https://localhost:3000)
+                     Browser (https://localhost:8000)
                               │
                               │ HTTPS (dev) / HTTP
                               ▼
               ┌───────────────────────────────┐
               │     Frontend (React 19)       │
-              │     Vite Dev Server :3000     │
+              │     Vite Dev Server :8000     │
               │                              │
               │  ┌────────────────────────┐  │
               │  │ Pages:                 │  │
@@ -187,7 +187,7 @@ Frontend: updates VM state to "Running"
 - **Pool passwords** stored in SQLite (encrypted-at-rest planned for v1.0)
 - **HTTPS** between backend and XCP-ng (SSL verification optional)
 - **CORS** restricted to known frontend origins
-- **No default exposed ports** beyond 3000/8000 (use reverse proxy for production)
+- **No default exposed ports** beyond 8000/8000 (use reverse proxy for production)
 
 ## Design Decisions
 

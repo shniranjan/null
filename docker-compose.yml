@@ -1,8 +1,8 @@
 services:
-  backend:
-    build: ./backend
-    image: ghcr.io/shniranjan/null-backend:latest
-    container_name: null-backend
+  null:
+    build: .
+    image: ghcr.io/shniranjan/null:latest
+    container_name: null
     ports:
       - "8000:8000"
     env_file:
@@ -11,24 +11,4 @@ services:
       - XCPNG_DB_PATH=/data/null.db
     volumes:
       - ./data:/data
-      - ./backend/app:/app/app:ro
     restart: unless-stopped
-    networks:
-      - null
-
-  frontend:
-    build: ./frontend
-    image: ghcr.io/shniranjan/null-frontend:latest
-    container_name: null-frontend
-    ports:
-      - "3000:3000"
-    depends_on:
-      backend:
-        condition: service_healthy
-    restart: unless-stopped
-    networks:
-      - null
-
-networks:
-  null:
-    driver: bridge

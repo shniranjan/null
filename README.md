@@ -77,31 +77,25 @@ who want:
 ## Architecture
 
 ```
-┌─────────────────────────────────────────────────────────┐
-│                    Docker Compose                        │
-│                                                         │
-│  ┌────────────────────┐     ┌────────────────────────┐  │
-│  │  Frontend (React)  │────▶│  Backend (FastAPI)     │  │
-│  │  Vite :3000        │     │  uvicorn :8000         │  │
-│  │                    │     │                        │  │
-│  │  • Dashboard       │     │  • REST API            │  │
-│  │  • VM Manager      │     │  • XAPI XML-RPC client │  │
-│  │  • Storage         │     │  • SQLite (users/logs) │──┼──▶ null.db
-│  │  • Networking      │     │  • JWT Auth            │  │
-│  │  • Console (noVNC) │     │  • Plugin system       │  │
-│  └────────────────────┘     └───────────┬────────────┘  │
-│                                         │               │
-└─────────────────────────────────────────┼───────────────┘
-                                          │ XML-RPC/HTTPS
-                                          ▼
-                               ┌─────────────────────┐
-                               │  XCP-ng Pool Master │
-                               │  XAPI (port 443)    │
-                               └─────────────────────┘
+┌──────────────────────────────────────────────┐
+│              Docker (single container)        │
+│                                              │
+│  ┌────────────────────────────────────────┐  │
+│  │  FastAPI :8000                         │  │
+│  │                                        │  │
+│  │  • React SPA (static files)            │  │
+│  │  • REST API (/api/*)                   │  │
+│  │  • XAPI XML-RPC client                 │──┼──▶ XCP-ng Pool Master
+│  │  • SQLite (null.db)                    │  │    XAPI :443
+│  │  • JWT Auth                            │  │
+│  └────────────────────────────────────────┘  │
+│                                              │
+└──────────────────────────────────────────────┘
 ```
 
-- **Backend:** Python 3.13, FastAPI, SQLite, xmlrpc.client (stdlib)
-- **Frontend:** React 19, Vite 6, custom dark theme CSS
+- **Single binary:** One container, one port, zero internal networking
+- **Backend:** Python 3.13, FastAPI, SQLite, `xmlrpc.client` (stdlib)
+- **Frontend:** React 19, served as static files by FastAPI
 - **Auth:** JWT tokens, bcrypt password hashing
 - **XAPI:** XML-RPC over HTTPS to XCP-ng pool master
 - **Persistence:** Single-file SQLite database (users, pools, audit log)
@@ -118,25 +112,18 @@ See [docs/architecture.md](docs/architecture.md) for detailed design.
 - **Node.js 22+** and **Python 3.13+** with `uv` (for local development)
 - A running **XCP-ng 8.2 or 8.3** pool (for actual management)
 
-### Option 1: Docker (Recommended)
+### Docker (Recommended)
 
 ```bash
-# Clone the repository
 git clone https://github.com/shniranjan/null.git
 cd null
-
-# Copy and edit environment
 cp .env.example .env
-# Edit .env — set XCPNG_MANAGER_SECRET to a strong random string
-
-# Build and start
+# edit .env — set XCPNG_MANAGER_SECRET to a strong random string
 docker compose up -d
-
-# Open in browser
-open http://localhost:3000
+open http://localhost:8000
 ```
 
-Default login: **admin** / **admin** (change immediately).
+**Default login:** `admin` / `admin` (change immediately).
 
 ### Option 2: Local Development
 
@@ -150,12 +137,12 @@ make dev-backend
 
 # Start frontend (terminal 2)
 make dev-frontend
-# → http://localhost:3000        (UI)
+# → http://localhost:8000        (UI)
 ```
 
 ### First Steps
 
-1. Log in at http://localhost:3000 with `admin` / `admin`
+1. Log in at http://localhost:8000 with `admin` / `admin`
 2. Go to **Settings** → add your XCP-ng pool (host, username, password)
 3. Click **Test** to verify the connection
 4. Go to **Dashboard** to see your pool status
