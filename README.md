@@ -107,12 +107,18 @@ See [docs/architecture.md](docs/architecture.md) for detailed design.
 ## Quick Start
 
 ### Prerequisites
+- **Raspberry Pi** fully supported (linux/arm64)
 
 - **Docker** and **Docker Compose** (for containerized deployment)
 - **Node.js 22+** and **Python 3.13+** with `uv` (for local development)
 - A running **XCP-ng 8.2 or 8.3** pool (for actual management)
 
 ### Docker (Recommended)
+
+Or pull the pre-built image directly:
+```bash
+docker run -p 8000:8000 ghcr.io/shniranjan/null:latest
+```
 
 ```bash
 git clone https://github.com/shniranjan/null.git
