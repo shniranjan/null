@@ -1,0 +1,22 @@
+# Disclaimer
+
+Null ("the Software") is provided "as is", without warranty of any kind,
+express or implied, including but not limited to the warranties of
+merchantability, fitness for a particular purpose, and noninfringement.
+
+In no event shall the authors or copyright holders be liable for any claim,
+damages, or other liability, whether in an action of contract, tort, or
+otherwise, arising from, out of, or in connection with the Software or the
+use or other dealings in the Software.
+
+**You acknowledge that:**
+
+- The Software is in alpha stage and may contain bugs.
+- The Software can irreversibly delete, destroy, or disrupt virtual machines,
+  storage repositories, network configurations, and other infrastructure.
+- You are solely responsible for maintaining backups of all affected systems
+  before using the Software.
+- You assume all risk associated with the use of the Software.
+- The authors are not responsible for any data loss, service interruption,
+  downtime, or damage resulting from the use or misuse of the Software.
+- You should always test in a non-production environment first.

@@ -10,6 +10,13 @@ designed to be self-hosted in Docker, connected to your XCP-ng infrastructure.
 ![Python: 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)
 ![React: 19](https://img.shields.io/badge/react-19-61dafb.svg)
 
+> ⚠️ **Disclaimer:** Null is alpha software. It can start, stop, destroy,
+> and irreversibly delete virtual machines, storage repositories, and
+> network configurations. Use at your own risk. The authors assume no
+> liability for data loss, downtime, or infrastructure damage resulting
+> from the use of this software. Always test in a non-production
+> environment first. You are responsible for your own backups.
+
 ---
 
 ## Overview
@@ -251,7 +258,7 @@ See [docs/contributing.md](docs/contributing.md) for guidelines.
 
 ## License
 
-GNU Affero General Public License v3.0 — see [LICENSE](LICENSE) file.
+GNU Affero General Public License v3.0 — see [LICENSE](LICENSE). Read the [DISCLAIMER](DISCLAIMER) before use.
 
 This is a strong copyleft license designed for network-facing software.
 If you modify this program and make it available as a service over a

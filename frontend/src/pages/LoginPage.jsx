@@ -70,6 +70,8 @@ export default function LoginPage() {
           Default credentials: <code>admin</code> / <code>admin</code>
           <br />
           Change after first login. ∅
+          <br /><br />
+          <strong>⚠️ Alpha software — use at your own risk.</strong>
         </p>
       </div>
     </div>
