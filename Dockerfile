@@ -24,6 +24,9 @@ COPY backend/app/ ./app/
 # Copy built frontend into backend's static directory
 COPY --from=frontend-build /frontend/dist ./app/static
 
+# Copy documentation
+COPY docs/ /docs/
+
 RUN mkdir -p /data
 
 EXPOSE 8000
