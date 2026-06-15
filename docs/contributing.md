@@ -21,7 +21,7 @@ make dev-backend
 
 # Terminal 2: Frontend
 make dev-frontend
-# → http://localhost:3000
+# → http://localhost:8000
 ```
 
 ## Project Conventions

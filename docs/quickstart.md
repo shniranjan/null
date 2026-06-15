@@ -52,13 +52,12 @@ XCPNG_MANAGER_SECRET=<your-random-hex>
 docker compose up -d
 ```
 
-This builds and starts two containers:
-- `null` (port 8000) — FastAPI REST API
-- `null` (port 3000) — React web UI
+This builds and starts a single container:
+- `null` — serves the UI and REST API
 
 ### 4. Open the UI
 
-Navigate to **http://localhost:3000**
+Navigate to **http://localhost:8000**
 
 Default login: `admin` / `admin`
 
@@ -118,7 +117,7 @@ API docs available at http://localhost:8000/docs (Swagger UI).
 make dev-frontend
 ```
 
-The frontend starts on **http://localhost:3000**.
+The frontend starts on **http://localhost:8000**.
 
 Vite proxies `/api` requests to the backend automatically.
 

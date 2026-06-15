@@ -1,79 +1,63 @@
 # Architecture
 
-Null is a two-tier web application that bridges a modern React
-frontend with XCP-ng's XAPI management protocol.
+Null is a single-container application — FastAPI serves both the React SPA
+and REST API from one process, communicating with XCP-ng via XAPI XML-RPC.
 
 ## High-Level Design
 
 ```
-                     Browser (https://localhost:8000)
+                     Browser (http://localhost:8000)
                               │
-                              │ HTTPS (dev) / HTTP
                               ▼
               ┌───────────────────────────────┐
-              │     Frontend (React 19)       │
-              │     Vite Dev Server :8000     │
+              │     Null (single container)    │
+              │     FastAPI + uvicorn :8000    │
               │                              │
               │  ┌────────────────────────┐  │
-              │  │ Pages:                 │  │
-              │  │  Dashboard, VMs, SRs,  │  │
-              │  │  Networks, Snaps, etc. │  │
+              │  │ React SPA (static)     │  │
+              │  │ served at /            │  │
               │  └────────────────────────┘  │
               │  ┌────────────────────────┐  │
-              │  │ API Client:            │  │
-              │  │  JWT attach, 401 retry │  │
-              │  └───────────┬────────────┘  │
-              └──────────────┼───────────────┘
-                             │ REST (JSON)
-                             │ /api/*
-                             ▼
-              ┌───────────────────────────────┐
-              │     Backend (FastAPI)         │
-              │     uvicorn :8000             │
-              │                              │
-              │  ┌────────────────────────┐  │
-              │  │ Auth Layer:            │  │
-              │  │  JWT verify → UserOut  │  │
+              │  │ REST API (/api/*)      │  │
+              │  │  Auth, Pools, VMs,     │  │
+              │  │  Storage, Network, etc │  │
               │  └────────────────────────┘  │
               │  ┌────────────────────────┐  │
-              │  │ Route Handlers:        │  │
-              │  │  /auth, /pools, /users │  │
-              │  │  /vms, /storage, etc.  │  │
-              │  └────────────────────────┘  │
-              │  ┌────────────────────────┐  │
-              │  │ XAPI Client Layer:     │  │
-              │  │  PoolConnection        │  │
-              │  │  PoolRegistry          │  │
+              │  │ XAPI Client Layer      │  │
+              │  │ PoolConnection         │  │
+              │  │ PoolRegistry           │  │
               │  └───────────┬────────────┘  │
               │              │               │
               │  ┌───────────▼────────────┐  │
-              │  │ SQLite                 │  │
-              │  │  users, pools,         │  │
-              │  │  audit_log, prefs      │  │
+              │  │ SQLite (null.db)       │  │
+              │  │ users, pools, audit    │  │
               │  └────────────────────────┘  │
               └──────────────┼───────────────┘
-                             │ XML-RPC over HTTPS
-                             │ (session.login_with_password)
+                             │ XML-RPC / HTTPS
                              ▼
               ┌───────────────────────────────┐
               │     XCP-ng Pool Master        │
-              │     XAPI (xapi) :443          │
-              │                              │
-              │  ┌────────────────────────┐  │
-              │  │ Xen Hypervisor         │  │
-              │  └────────────────────────┘  │
-              │  ┌────────────────────────┐  │
-              │  │ state.db (XML)         │  │
-              │  └────────────────────────┘  │
+              │     XAPI :443                 │
               └───────────────────────────────┘
 ```
 
+## Deployment
+
+**Single image, single port, zero internal networking.**
+
+```bash
+docker run -p 8000:8000 ghcr.io/shniranjan/null:latest
+```
+
+Multi-arch: `linux/amd64` and `linux/arm64` (Raspberry Pi, AWS Graviton).
+
 ## Key Components
 
-### 1. Backend (FastAPI + SQLite)
+### 1. FastAPI Application
 
-The backend is a Python FastAPI application that serves as a REST API gateway
-between the frontend and XCP-ng's XAPI.
+The single process serves both the React SPA (static files at `/`) and the
+REST API (`/api/*`). In development, Vite dev server proxies `/api` to the
+backend. In production, the built frontend is served by FastAPI's StaticFiles.
 
 **Why FastAPI?**
 - Native async support (WebSocket for real-time events)
@@ -93,7 +77,6 @@ between the frontend and XCP-ng's XAPI.
 - Session refs are cached in-memory in `PoolConnection` objects
 - Failed calls trigger auto-reconnect (session expiry handling)
 
-### 2. Frontend (React + Vite)
 
 Simple React SPA with:
 - **State-based routing** (no react-router needed at this scale)
