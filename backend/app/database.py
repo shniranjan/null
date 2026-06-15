@@ -12,7 +12,7 @@ Schema:
 import sqlite3
 import os
 from datetime import datetime, timezone
-from config import settings
+from app.config import settings
 
 
 def get_db() -> sqlite3.Connection:

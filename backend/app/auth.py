@@ -21,8 +21,8 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from pydantic import BaseModel
 
-from config import settings
-from database import get_db
+from app.config import settings
+from app.database import get_db
 
 # ── Password hashing ──────────────────────────────────────────────────
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

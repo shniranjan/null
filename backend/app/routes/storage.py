@@ -17,9 +17,9 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
 
-from auth import UserOut, get_current_user
-from database import get_db
-from xapi.client import pool_registry
+from app.auth import UserOut, get_current_user
+from app.database import get_db
+from app.xapi.client import pool_registry
 
 router = APIRouter(prefix="/api/pools/{pool_id}/storage", tags=["storage"])
 

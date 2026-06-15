@@ -6,8 +6,8 @@ GET /api/audit  — paginated audit log entries
 
 from fastapi import APIRouter, Depends, Query
 
-from auth import UserOut, get_current_user
-from database import get_db
+from app.auth import UserOut, get_current_user
+from app.database import get_db
 
 router = APIRouter(prefix="/api/audit", tags=["audit"])
 

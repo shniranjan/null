@@ -7,8 +7,8 @@ GET /api/health/xcpng  — test connection to a pool
 
 from fastapi import APIRouter, Depends, HTTPException, Query
 
-from auth import UserOut, get_current_user
-from xapi.client import pool_registry
+from app.auth import UserOut, get_current_user
+from app.xapi.client import pool_registry
 
 router = APIRouter(prefix="/api/health", tags=["health"])
 

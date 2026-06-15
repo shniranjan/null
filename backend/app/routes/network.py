@@ -15,8 +15,8 @@ POST   /api/pools/{pool_id}/network/vifs/{ref}/destroy — detach NIC
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 
-from auth import UserOut, get_current_user
-from xapi.client import pool_registry
+from app.auth import UserOut, get_current_user
+from app.xapi.client import pool_registry
 
 router = APIRouter(prefix="/api/pools/{pool_id}/network", tags=["network"])
 

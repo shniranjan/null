@@ -5,7 +5,7 @@ GET    /api/auth/me      — current user info
 """
 
 from fastapi import APIRouter, Depends, HTTPException, status
-from auth import (
+from app.auth import (
     LoginRequest,
     TokenResponse,
     UserOut,

@@ -8,8 +8,8 @@ GET /api/pools/{pool_id}/metrics/dashboard  — combined dashboard metrics
 
 from fastapi import APIRouter, Depends, HTTPException
 
-from auth import UserOut, get_current_user
-from xapi.client import pool_registry
+from app.auth import UserOut, get_current_user
+from app.xapi.client import pool_registry
 
 router = APIRouter(prefix="/api/pools/{pool_id}/metrics", tags=["metrics"])
 

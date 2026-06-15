@@ -15,23 +15,23 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 import os
 
-from config import settings
-from database import init_db
-from auth import ensure_default_admin
+from app.config import settings
+from app.database import init_db
+from app.auth import ensure_default_admin
 
-from routes.auth import router as auth_router
-from routes.users import router as users_router
-from routes.pools import router as pools_router
-from routes.health import router as health_router
-from routes.audit import router as audit_router
-from routes.vms import router as vms_router
-from routes.storage import router as storage_router
-from routes.network import router as network_router
-from routes.snapshots import router as snapshots_router
-from routes.events import router as events_router
-from routes.metrics import router as metrics_router
-from routes.docs_api import router as docs_router
-from routes.passthrough import router as passthrough_router
+from app.routes.auth import router as auth_router
+from app.routes.users import router as users_router
+from app.routes.pools import router as pools_router
+from app.routes.health import router as health_router
+from app.routes.audit import router as audit_router
+from app.routes.vms import router as vms_router
+from app.routes.storage import router as storage_router
+from app.routes.network import router as network_router
+from app.routes.snapshots import router as snapshots_router
+from app.routes.events import router as events_router
+from app.routes.metrics import router as metrics_router
+from app.routes.docs_api import router as docs_router
+from app.routes.passthrough import router as passthrough_router
 
 STATIC_DIR = os.path.join(os.path.dirname(__file__), "static")
 
@@ -41,7 +41,7 @@ async def lifespan(app: FastAPI):
     init_db()
     ensure_default_admin()
     yield
-    from xapi.client import pool_registry
+    from app.xapi.client import pool_registry
     pool_registry.shutdown_all()
 
 

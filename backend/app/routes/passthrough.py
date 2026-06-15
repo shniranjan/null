@@ -17,8 +17,8 @@ DELETE /api/pools/{pool_id}/vms/{ref}/passthrough/pci  — remove PCI passthroug
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from pydantic import BaseModel
 
-from auth import UserOut, get_current_user
-from xapi.client import pool_registry
+from app.auth import UserOut, get_current_user
+from app.xapi.client import pool_registry
 
 router = APIRouter(prefix="/api/pools/{pool_id}", tags=["passthrough"])
 

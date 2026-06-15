@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter, Depends, HTTPException, status
 from pydantic import BaseModel
 
-from auth import (
+from app.auth import (
     UserOut,
     CreateUserRequest,
     get_admin_user,
