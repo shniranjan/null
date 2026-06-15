@@ -27,8 +27,8 @@ This guide walks you through setting up Null from zero to managing your first po
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/yourusername/xcpng-manager.git
-cd xcpng-manager
+git clone https://github.com/shniranjan/null.git
+cd null
 ```
 
 ### 2. Configure environment
@@ -53,8 +53,8 @@ docker compose up -d
 ```
 
 This builds and starts two containers:
-- `xcpng-manager-backend` (port 8000) — FastAPI REST API
-- `xcpng-manager-frontend` (port 3000) — React web UI
+- `null` (port 8000) — FastAPI REST API
+- `null` (port 3000) — React web UI
 
 ### 4. Open the UI
 
@@ -93,8 +93,8 @@ If successful, you'll see the host count. Your pool is now connected!
 ### 1. Clone and install
 
 ```bash
-git clone https://github.com/yourusername/xcpng-manager.git
-cd xcpng-manager
+git clone https://github.com/shniranjan/null.git
+cd null
 make setup
 ```
 
@@ -134,7 +134,7 @@ Same as Docker steps 4–6 above.
 
 1. **Verify network:** Can you reach the XCP-ng host from the Docker container?
    ```bash
-   docker exec xcpng-manager-backend curl -k https://<xcpng-host>/
+   docker exec null curl -k https://<xcpng-host>/
    ```
 
 2. **Self-signed certificates:** Uncheck "Verify SSL" in pool settings. XCP-ng

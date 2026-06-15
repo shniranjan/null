@@ -17,7 +17,7 @@ router = APIRouter(prefix="/api/health", tags=["health"])
 async def health_check():
     return {
         "status": "ok",
-        "service": "xcpng-manager",
+        "service": "Null",
         "version": "0.1.0",
     }
 

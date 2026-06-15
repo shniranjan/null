@@ -5,8 +5,8 @@ Null is open source and welcomes contributions!
 ## Development Setup
 
 ```bash
-git clone https://github.com/yourusername/xcpng-manager.git
-cd xcpng-manager
+git clone https://github.com/shniranjan/null.git
+cd null
 make setup
 ```
 

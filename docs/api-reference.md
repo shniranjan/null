@@ -84,7 +84,7 @@ Backend health check (public, no auth required).
 ```json
 {
   "status": "ok",
-  "service": "xcpng-manager",
+  "service": "Null",
   "version": "0.1.0"
 }
 ```

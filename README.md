@@ -188,7 +188,7 @@ See [docs/api-reference.md](docs/api-reference.md) for complete API reference.
 ## Project Structure
 
 ```
-xcpng-manager/
+null/
 ├── docker-compose.yml       # Docker deployment
 ├── Makefile                 # Convenience commands
 ├── README.md                # This file
