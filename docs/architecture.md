@@ -5,41 +5,7 @@ and REST API from one process, communicating with XCP-ng via XAPI XML-RPC.
 
 ## High-Level Design
 
-```
-                     Browser (http://localhost:8000)
-                              │
-                              ▼
-              ┌───────────────────────────────┐
-              │     Null (single container)    │
-              │     FastAPI + uvicorn :8000    │
-              │                              │
-              │  ┌────────────────────────┐  │
-              │  │ React SPA (static)     │  │
-              │  │ served at /            │  │
-              │  └────────────────────────┘  │
-              │  ┌────────────────────────┐  │
-              │  │ REST API (/api/*)      │  │
-              │  │  Auth, Pools, VMs,     │  │
-              │  │  Storage, Network, etc │  │
-              │  └────────────────────────┘  │
-              │  ┌────────────────────────┐  │
-              │  │ XAPI Client Layer      │  │
-              │  │ PoolConnection         │  │
-              │  │ PoolRegistry           │  │
-              │  └───────────┬────────────┘  │
-              │              │               │
-              │  ┌───────────▼────────────┐  │
-              │  │ SQLite (null.db)       │  │
-              │  │ users, pools, audit    │  │
-              │  └────────────────────────┘  │
-              └──────────────┼───────────────┘
-                             │ XML-RPC / HTTPS
-                             ▼
-              ┌───────────────────────────────┐
-              │     XCP-ng Pool Master        │
-              │     XAPI :443                 │
-              └───────────────────────────────┘
-```
+Single container: FastAPI serves the React SPA and REST API from one process. Communicates with XCP-ng hosts via XAPI XML-RPC over HTTPS. SQLite provides persistence for users, pool configs, and audit logs.
 
 ## Deployment
 
@@ -105,37 +71,11 @@ Authentication uses JWT tokens with bcrypt password hashing. Tokens expire after
 
 ### 5. Audit Logging
 
-Every management action (pool add, VM start, etc.) writes to `audit_log`:
+Every management action (pool add, VM start, etc.) is recorded with user identity, action type, target, and timestamp. This provides a complete, immutable record of who did what, when.
 
-```sql
-INSERT INTO audit_log (user_id, username, pool_id, action, target_type, ...)
-```
+## Data Flow
 
-This provides a complete, immutable record of who did what, when.
-
-## Data Flow: VM Operation Example
-
-```
-User clicks "Start VM" in UI
-         │
-         ▼
-Frontend: api.post("/vms/{ref}/start")
-         │
-         ▼
-Backend: pool.call("VM.start", vm_ref)
-         │
-         ▼
-XAPI: VM.start(session_ref, vm_ref)
-         │
-         ▼
-Xen Hypervisor: boots the VM
-         │
-         ▼
-Backend: INSERT INTO audit_log (...)
-         │
-         ▼
-Frontend: updates VM state to "Running"
-```
+User actions in the UI trigger API calls to the backend, which translates them into XAPI calls to the XCP-ng pool master. All mutating operations are recorded in the audit log before the UI updates to reflect the new state.
 
 ## Security Considerations
 
@@ -158,4 +98,4 @@ Frontend: updates VM state to "Running"
 | Backend framework | FastAPI | Async, OpenAPI auto-docs, WebSocket |
 | Database | SQLite | Single file, zero config, sufficient scale |
 | XAPI transport | xmlrpc.client | Python stdlib, no external SDK |
-| Auth | python-jose + passlib | Well-audited JWT + bcrypt |
+| Auth | JWT + bcrypt | Well-audited standard libraries |
