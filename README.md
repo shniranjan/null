@@ -83,29 +83,7 @@ who want:
 
 ## Architecture
 
-```
-┌──────────────────────────────────────────────┐
-│              Docker (single container)        │
-│                                              │
-│  ┌────────────────────────────────────────┐  │
-│  │  FastAPI :8000                         │  │
-│  │                                        │  │
-│  │  • React SPA (static files)            │  │
-│  │  • REST API (/api/*)                   │  │
-│  │  • XAPI XML-RPC client                 │──┼──▶ XCP-ng Pool Master
-│  │  • SQLite (null.db)                    │  │    XAPI :443
-│  │  • JWT Auth                            │  │
-│  └────────────────────────────────────────┘  │
-│                                              │
-└──────────────────────────────────────────────┘
-```
-
-- **Single binary:** One container, one port, zero internal networking
-- **Backend:** Python 3.13, FastAPI, SQLite, `xmlrpc.client` (stdlib)
-- **Frontend:** React 19, served as static files by FastAPI
-- **Auth:** JWT tokens, bcrypt password hashing
-- **XAPI:** XML-RPC over HTTPS to XCP-ng pool master
-- **Persistence:** Single-file SQLite database (users, pools, audit log)
+Single container: Python/FastAPI backend + React frontend, SQLite persistence. Communicates with XCP-ng hosts via XAPI.
 
 See [docs/architecture.md](docs/architecture.md) for detailed design.
 
@@ -136,7 +114,7 @@ docker compose up -d
 open http://localhost:8000
 ```
 
-**Default login:** `admin` / `admin` (change immediately).
+**On first login,** use the credentials shown during setup. Change immediately from the Settings page.
 
 ### Option 2: Local Development
 
@@ -155,7 +133,7 @@ make dev-frontend
 
 ### First Steps
 
-1. Log in at http://localhost:8000 with `admin` / `admin`
+1. Log in at http://localhost:8000 with the credentials from setup
 2. Go to **Settings** → add your XCP-ng pool (host, username, password)
 3. Click **Test** to verify the connection
 4. Go to **Dashboard** to see your pool status
@@ -204,44 +182,13 @@ See [docs/api-reference.md](docs/api-reference.md) for complete API reference.
 null/
 ├── docker-compose.yml       # Docker deployment
 ├── Makefile                 # Convenience commands
-├── README.md                # This file
 ├── docs/                    # Documentation
-│   ├── quickstart.md
-│   ├── architecture.md
-│   ├── api-reference.md
-│   └── contributing.md
-├── backend/
-│   ├── Dockerfile
-│   ├── requirements.txt
-│   └── app/
-│       ├── main.py          # FastAPI entry point
-│       ├── config.py        # Settings
-│       ├── database.py      # SQLite schema
-│       ├── auth.py          # JWT + user management
-│       ├── xapi/            # XAPI XML-RPC client
-│       │   └── client.py    # Pool connection, XAPI calls
-│       ├── routes/          # API route modules
-│       │   ├── auth.py      # Login/logout
-│       │   ├── users.py     # User CRUD
-│       │   ├── pools.py     # Pool management
-│       │   ├── health.py    # Health checks
-│       │   └── audit.py     # Audit log
-│       └── plugins/         # Plugin system
-├── frontend/
-│   ├── Dockerfile
-│   ├── package.json
-│   ├── vite.config.js
-│   └── src/
-│       ├── App.jsx          # Root component
-│       ├── api/client.js    # API client
-│       ├── context/         # React contexts
-│       ├── components/      # Reusable UI
-│       ├── pages/           # Route pages
-│       └── styles/          # CSS
+├── backend/                 # Python/FastAPI
+├── frontend/                # React SPA
 └── data/                    # SQLite database (gitignored)
 ```
 
----
+See [docs/contributing.md](docs/contributing.md) for development setup.
 
 ## Contributing
 
