@@ -99,35 +99,9 @@ PoolRegistry {
 Each `PoolConnection` manages its own XAPI session independently.
 Pools can be added/removed without affecting others.
 
-### 4. Authentication Flow
+### 4. Authentication
 
-```
-[Browser]                    [Backend]                   [SQLite]
-    │                            │                          │
-    │  POST /api/auth/login      │                          │
-    │  {username, password}      │                          │
-    │ ──────────────────────────▶│                          │
-    │                            │  SELECT * FROM users     │
-    │                            │  WHERE username = ?      │
-    │                            │ ─────────────────────────▶│
-    │                            │  {id, hash, role}        │
-    │                            │ ◀─────────────────────────│
-    │                            │                          │
-    │                            │  bcrypt.verify(pw, hash) │
-    │                            │  JWT.sign({sub: id, role})│
-    │                            │                          │
-    │  {access_token, user}      │                          │
-    │ ◀──────────────────────────│                          │
-    │                            │                          │
-    │  GET /api/pools            │                          │
-    │  Authorization: Bearer ... │                          │
-    │ ──────────────────────────▶│                          │
-    │                            │  JWT.decode(token)       │
-    │                            │  verify sub exists       │
-    │                            │                          │
-    │  [{pool1}, {pool2}]        │                          │
-    │ ◀──────────────────────────│                          │
-```
+Authentication uses JWT tokens with bcrypt password hashing. Tokens expire after a configurable duration. All API requests (except login) require a valid token.
 
 ### 5. Audit Logging
 
@@ -167,7 +141,7 @@ Frontend: updates VM state to "Running"
 
 - **JWT tokens** expire after 8 hours (configurable)
 - **bcrypt** for password hashing (never stored in plaintext)
-- **Pool passwords** stored in SQLite (encrypted-at-rest planned for v1.0)
+- **Pool passwords** stored securely (encrypted-at-rest coming in v1.0)
 - **HTTPS** between backend and XCP-ng (SSL verification optional)
 - **CORS** restricted to known frontend origins
 - **No default exposed ports** beyond 8000/8000 (use reverse proxy for production)

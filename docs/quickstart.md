@@ -59,7 +59,7 @@ This builds and starts a single container:
 
 Navigate to **http://localhost:8000**
 
-Default login: `admin` / `admin`
+Default login: credentials shown during first setup
 
 **⚠️ Change the admin password immediately** (Settings → Users).
 
@@ -157,7 +157,7 @@ cd backend && source .venv/bin/activate && uv pip install -r requirements.txt
 Reset the database (⚠️ destructive — removes all users and pool configs):
 ```bash
 make db-reset
-# Restart backend to recreate with default admin/admin
+# Restart backend to recreate database
 ```
 
 ### Frontend can't reach backend (Docker)

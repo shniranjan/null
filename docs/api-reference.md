@@ -22,8 +22,8 @@ Authenticate and receive a JWT token.
 **Request:**
 ```json
 {
-  "username": "admin",
-  "password": "admin"
+  "username": "your-username",
+  "password": "your-password"
 }
 ```
 
