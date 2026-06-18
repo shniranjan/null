@@ -171,7 +171,7 @@ See [docs/api-reference.md](docs/api-reference.md) for complete API reference.
 | Environment Variable | Default | Description |
 |---------------------|---------|-------------|
 | `XCPNG_MANAGER_SECRET` | *(required)* | JWT signing secret (use a strong random string) |
-| `XCPNG_DB_PATH` | `null.db` | SQLite database file path |
+| `XCPNG_DB_PATH` | — | SQLite database file path |
 | `XCPNG_TOKEN_EXPIRE` | `480` | JWT token expiry in minutes (8 hours) |
 
 ---
