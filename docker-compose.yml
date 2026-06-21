@@ -7,7 +7,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - XCPNG_MANAGER_SECRET=***      - XCPNG_DB_PATH=/data/null.db
+      - XCPNG_MANAGER_SECRET=***
+      - XCPNG_DB_PATH=/data/null.db
     volumes:
       - ./data:/data
     restart: unless-stopped
