@@ -7,7 +7,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE: ghcr.io/shniranjan/xcpng-gui
+  IMAGE: ghcr.io/shniranjan/null
 
 jobs:
   build:
